@@ -15,9 +15,12 @@ import java.util.Properties;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
@@ -244,6 +247,11 @@ public class MainController {
 				while ((s = inStreamReader.readLine()) != null) {
 					System.out.println(s);
 				}
+				
+				System.out.println();
+				System.out.println();
+				System.out.println("Extraction finished!");
+				new Alert(AlertType.INFORMATION, "Extraction finished!").showAndWait();
 			}catch (IOException e) {
 				e.printStackTrace();
 				e.printStackTrace(out);

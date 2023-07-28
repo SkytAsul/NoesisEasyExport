@@ -21,12 +21,11 @@ public class Main extends Application {
 		instance = this;
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("Main.fxml"));
+			loader.setLocation(getClass().getResource("/fxml/Main.fxml"));
 			AnchorPane rootLayout = (AnchorPane) loader.load();
 
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setTitle("Noesis easy export");
-			primaryStage.setResizable(false);
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/icon16.png")));
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/icon32.png")));
 			primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/icon48.png")));
