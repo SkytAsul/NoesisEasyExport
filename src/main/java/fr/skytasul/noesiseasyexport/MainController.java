@@ -81,22 +81,20 @@ public class MainController {
 	}
 
 	public void save() throws IOException {
-		FileOutputStream stream = new FileOutputStream(new File("nee-properties"));
-
-		Properties properties = new Properties();
-		if (lastFolder != null) properties.setProperty("lastFolder", lastFolder.getAbsolutePath());
-		if (noesisFile != null) properties.setProperty("noesis", noesisFile.getAbsolutePath());
-		if (!type.getSelectionModel().isEmpty()) properties.setProperty("type", type.getSelectionModel().getSelectedItem());
-		properties.setProperty("destination", destination.getText());
-		properties.setProperty("flipuv", String.valueOf(flipUVs.isSelected()));
-		properties.setProperty("rotate", String.valueOf(rotate90.isSelected()));
-		properties.setProperty("notext", String.valueOf(noTextures.isSelected()));
-		properties.setProperty("nogeo", String.valueOf(noGeometry.isSelected()));
-		properties.setProperty("noanims", String.valueOf(noAnimations.isSelected()));
-		properties.setProperty("advancedOptions", advancedOptions.getText());
-		properties.store(stream, "Noesis Easy Export properties");
-
-		stream.close();
+		try (FileOutputStream stream = new FileOutputStream(new File("nee-properties"))) {
+			Properties properties = new Properties();
+			if (lastFolder != null) properties.setProperty("lastFolder", lastFolder.getAbsolutePath());
+			if (noesisFile != null) properties.setProperty("noesis", noesisFile.getAbsolutePath());
+			if (!type.getSelectionModel().isEmpty()) properties.setProperty("type", type.getSelectionModel().getSelectedItem());
+			properties.setProperty("destination", destination.getText());
+			properties.setProperty("flipuv", String.valueOf(flipUVs.isSelected()));
+			properties.setProperty("rotate", String.valueOf(rotate90.isSelected()));
+			properties.setProperty("notext", String.valueOf(noTextures.isSelected()));
+			properties.setProperty("nogeo", String.valueOf(noGeometry.isSelected()));
+			properties.setProperty("noanims", String.valueOf(noAnimations.isSelected()));
+			properties.setProperty("advancedOptions", advancedOptions.getText());
+			properties.store(stream, "Noesis Easy Export properties");
+		}
 	}
 
 	@FXML
@@ -116,12 +114,9 @@ public class MainController {
 		}, true);
 		System.setOut(out);
 
-		FileInputStream stream = null;
-		try {
-			File file = new File("nee-properties");
-			if (file.exists()) {
-				stream = new FileInputStream(file);
-
+		File file = new File("nee-properties");
+		if (file.exists()) {
+			try (FileInputStream stream = new FileInputStream(file)){
 				Properties properties = new Properties();
 				properties.load(stream);
 				if (properties.containsKey("lastFolder")) lastFolder = new File(properties.getProperty("lastFolder"));
@@ -136,16 +131,10 @@ public class MainController {
 				advancedOptions.setText(properties.getProperty("advancedOptions"));
 
 				if (noesisFile != null) exe.setTextFill(Color.rgb(34, 109, 31));
-			}
-		}catch (IOException e) {
-			System.err.println("An error occured during load of properties.");
-			e.printStackTrace();
-			e.printStackTrace(out);
-		}finally {
-			try {
-				if (stream != null) stream.close();
 			}catch (IOException e) {
+				System.err.println("An error occured during load of properties.");
 				e.printStackTrace();
+				e.printStackTrace(out);
 			}
 		}
 	}
@@ -247,16 +236,15 @@ public class MainController {
 				while ((s = inStreamReader.readLine()) != null) {
 					System.out.println(s);
 				}
-				
-				System.out.println();
-				System.out.println();
-				System.out.println("Extraction finished!");
-				new Alert(AlertType.INFORMATION, "Extraction finished!").showAndWait();
 			}catch (IOException e) {
 				e.printStackTrace();
 				e.printStackTrace(out);
 			}
 		}
+		System.out.println();
+		System.out.println();
+		System.out.println("Extraction finished!");
+		new Alert(AlertType.INFORMATION, "Extraction finished!").showAndWait();
 	}
 
 }
